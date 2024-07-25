@@ -1,0 +1,11 @@
+
+go
+- base: U48
+- exp: U48
+- acc: U48
+: U48
+
+switch exp {
+  0: acc
+  _: (go base (- exp 1) (* acc base))
+}

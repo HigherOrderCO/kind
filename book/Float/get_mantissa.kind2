@@ -1,0 +1,19 @@
+/// Gets the mantissa of a Float number.
+///
+/// # Input
+///
+/// * `a` - The Float number
+///
+/// # Output
+///
+/// The mantissa of the float as a U48
+
+use Float/{new}
+
+get_mantissa
+- a: Float
+: U48
+
+match a {
+  new: a.mantissa
+}

@@ -1,0 +1,40 @@
+/// Adds two Float values.
+///
+/// # Inputs
+///
+/// * `a` - The first Float value.
+/// * `b` - The second Float value.
+///
+/// # Output
+///
+/// The sum of `a` and `b` as a new Float.
+
+use Float/{new,normalize}
+use Bool/{true,false}
+use U48/{exp,less_than,equal}
+
+add
+- a: Float
+- b: Float
+: Float
+
+match a {
+  new:
+    match b {
+      new:
+        let exp_diff = (- a.exponent b.exponent)
+        let a_larger = (less_than b.exponent a.exponent)
+        match a_larger {
+          true:
+            let scaled_b = (* b.mantissa (exp 10 (- a.exponent b.exponent)))
+            let sum = (+ scaled_b a.mantissa)
+            (normalize (new sum a.exponent))
+          false:
+            let scaled_a = (* a.mantissa (exp 10 (- b.exponent a.exponent)))
+            let sum = (+ scaled_a b.mantissa)
+            (normalize (new sum b.exponent))
+        }
+
+     }
+}
+

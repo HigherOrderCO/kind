@@ -1,0 +1,36 @@
+/// Helper function for normalizing a Float value.
+///
+/// This function recursively adjusts the mantissa and exponent
+///
+/// # Inputs
+///
+/// * `mantissa` - The current mantissa value.
+/// * `exponent` - The current exponent value.
+///
+/// # Output
+///
+/// A normalized Float value.
+
+use Float/{new}
+
+go
+- mantissa: U48
+- exponent: U48
+: Float
+
+// the num that divides and modulo mantissa here is also the precision
+// Imagine we have 10 -> 1 digit of precision. Then 3/2 would be 15 * 10^-1, but the 1 digit precision
+// Would normalize it to 1 * 10^0 which is wrong (too bad precision).
+let mantissa_mod_10 = (% mantissa 10)
+switch mantissa_mod_10 {
+  0:
+    switch mantissa {
+      0: (new 0 0)
+      _: (go (/ mantissa 10) (- exponent 1))
+    }
+  _:
+    switch mantissa {
+      0: (new 0 0)
+      _: (new mantissa exponent)
+    }
+}

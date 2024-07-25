@@ -1,0 +1,37 @@
+/// Divides two Float values.
+///
+/// # Inputs
+///
+/// * `a` - The first Float value.
+/// * `b` - The second Float value.
+///
+/// # Output
+///
+/// The division of `a` and `b` as a new Float.
+/// 
+
+use Float/{new,normalize}
+use U48/{exp}
+
+div
+- a: Float
+- b: Float
+: Float
+
+// divide both mantissas and sub both exponents
+match a {
+  new:
+    match b {
+      new:
+        // Shift the numerator left by 1 digit (multiply by 10) -> this should be adjusted for N digits of precision
+        let digits_precision = 4
+        let precision = (exp 10 digits_precision)
+        let shifted_num = (Float/new (* a.mantissa precision) a.exponent)
+        match shifted_num {
+          new:
+            let new_mantissa = (/ shifted_num.mantissa b.mantissa)
+            let new_exponent = (- shifted_num.exponent b.exponent) 
+            (normalize (Float/new new_mantissa (+ new_exponent digits_precision)))
+        }
+    }
+}

@@ -1,0 +1,22 @@
+/// Helper function to convert a Float to U48.
+///
+/// This function recursively adjusts the mantissa based on the exponent.
+///
+/// # Inputs
+///
+/// * `mantissa` - The current mantissa value.
+/// * `exponent` - The current exponent value.
+///
+/// # Output
+///
+/// The U48 representation of the Float, truncated to the next integer.
+
+go
+- mantissa: U48
+- exponent: U48
+: U48
+
+switch exponent {
+  0: mantissa
+  _: (go (/ mantissa 10) (- exponent 1))
+}

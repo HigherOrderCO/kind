@@ -1,0 +1,40 @@
+/// Subtracts two Float values.
+///
+/// # Inputs
+///
+/// * `a` - The first Float value.
+/// * `b` - The second Float value.
+///
+/// # Output
+///
+/// The subtraction of `a` and `b` as a new Float.
+
+use Float/{new,normalize}
+use Bool/{true,false}
+use U48/{less_than,exp}
+
+sub
+- a: Float
+- b: Float
+: Float
+
+match a {
+  new:
+    match b {
+      new:
+        let exp_diff = (- a.exponent b.exponent)
+        let a_larger = (less_than b.exponent a.exponent)
+        match a_larger {
+          true:
+            let scaled_b = (* b.mantissa (exp 10 (- a.exponent b.exponent)))
+            let subt = (- scaled_b a.mantissa)
+            (normalize (new subt a.exponent))
+          false:
+            let scaled_a = (* a.mantissa (exp 10 (- b.exponent a.exponent)))
+            let subt = (- scaled_a b.mantissa)
+            (normalize (new subt b.exponent))
+        }
+
+     }
+}
+

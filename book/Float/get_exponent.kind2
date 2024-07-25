@@ -1,0 +1,20 @@
+/// Gets the exponent of a Float number.
+///
+/// # Input
+///
+/// * `a` - The Float number
+///
+/// # Output
+///
+/// The exponent of the float (negative) as a U48
+/// Note that the exponent 2 is interpreted as -2 in calculations.
+
+use Float/{new}
+
+get_exponent
+- a: Float
+: U48
+
+match a {
+  new: a.exponent
+}

@@ -1,0 +1,10 @@
+/// Defines a floating point number representation
+///
+///
+/// # Fields
+///
+/// * `mantissa` - The significant digits of the float
+/// * `exponent` - The power of 10 by which to multiply the mantissa. It is ALWAYS used as it was negative for floating points.
+
+data Float
+| new (mantissa: U48) (exponent: U48) 

@@ -1,0 +1,29 @@
+/// Normalizes a Float value.
+///
+/// This function adjusts the mantissa and exponent of a Float so that:
+/// 1. There are no trailing zeros in the mantissa.
+/// 2. The exponent is adjusted accordingly.
+///
+/// Examples:
+/// - Float (40000 3) normalizes to Float (4 0)
+/// - Float (3 1) remains Float (3 1) (representing 0.3)
+/// - Float (150 2) normalizes to Float (15 1)
+///
+/// # Input
+///
+/// * `x` - The Float value to normalize.
+///
+/// # Output
+///
+/// A normalized Float value.
+
+use Float/{new}
+
+normalize
+- x: Float
+: Float
+
+match x {
+  new:
+    (Float/normalize/go x.mantissa x.exponent)
+}

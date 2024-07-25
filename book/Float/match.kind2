@@ -1,0 +1,19 @@
+/// Provides a way to pattern match on Float values.
+///
+/// # Inputs
+///
+/// * `P` - The motive of the elimination.
+/// * `n` - The case for the Float constructor.
+/// * `x` - The Float value to match on.
+///
+/// # Output
+///
+/// The result of the elimination.
+
+match
+- P: Float -> *
+- n: ∀(mantissa: U48) ∀(exponent: U48) (P (Float/new mantissa exponent))
+- x: Float
+: (P x)
+
+(~x P n)

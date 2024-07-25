@@ -1,0 +1,19 @@
+/// Computes the exponentiation of two U48 numbers.
+///
+/// # Inputs
+///
+/// * `base` - The base number.
+/// * `exp` - The exponent.
+///
+/// # Output
+///
+/// The result of `base` raised to the power of `exp`.
+
+use U48/exp/{go}
+
+exp
+- base: U48
+- exp: U48
+: U48
+
+(go base exp 1)

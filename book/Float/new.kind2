@@ -1,0 +1,17 @@
+/// Constructs a new Float instance.
+///
+/// # Inputs
+///
+/// * `mantissa` - The significant digits of the float.
+/// * `exponent` - The power of 10 by which to multiply the mantissa.
+///
+/// # Output
+///
+/// A new Float instance.
+
+new
+- mantissa: U48
+- exponent: U48
+: Float
+
+~λP λnew (new mantissa exponent)

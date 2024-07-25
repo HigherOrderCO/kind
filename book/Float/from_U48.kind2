@@ -1,0 +1,17 @@
+/// Constructs a Float from a U48 
+///
+/// # Input
+///
+/// * `a` - The U48 number.
+///
+/// # Output
+///
+/// The Float representation of that number.
+
+use Float/{new}
+
+from_U48
+- a: U48
+: Float
+
+(Float/new a 0)

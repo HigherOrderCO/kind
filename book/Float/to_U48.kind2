@@ -1,0 +1,24 @@
+/// Constructs a U48 from a Float. It truncates the float to the next integer.
+///
+/// Examples:
+/// - 1.25 (Float/new 125 2) -> 1 : U48
+/// - 1000.0 (Float/new 1 3) -> 1000 : U48
+/// - 0.75 (Float/new 75 2) -> 0 : U48
+///
+/// # Input
+///
+/// * `a` - The Float number.
+///
+/// # Output
+///
+/// The U48 representation of that number, truncated.
+
+use Float/{new}
+
+to_U48
+- a: Float
+: U48
+
+match a {
+  new: (Float/to_U48/go a.mantissa a.exponent)
+}

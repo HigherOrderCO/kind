@@ -1,0 +1,12 @@
+
+use Bool/{true,false}
+
+less_than
+- a: U48
+- b: U48
+: Bool
+
+switch x = (< a b) {
+  0: false
+  _: true
+}
