@@ -1,0 +1,2 @@
+ctr2 <T> <Z> : (Tests/CtrGen/ParamsTest T Z) = 
+ ~λP λctr1 λctr2 (ctr2)

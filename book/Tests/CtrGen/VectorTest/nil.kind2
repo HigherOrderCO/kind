@@ -1,0 +1,2 @@
+nil <T> : (Tests/CtrGen/VectorTest T Nat/zero) = 
+ ~λP λcons λnil (nil)

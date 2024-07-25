@@ -1,0 +1,6 @@
+data Tests/CtrGen/VectorTest T (len: Nat)
+| cons (len: Nat)
+       (head: T)
+       (tail: (Tests/CtrGen/VectorTest T len)) :
+       (Tests/CtrGen/VectorTest T (Nat/succ len))
+| nil : (Tests/CtrGen/VectorTest T Nat/zero)

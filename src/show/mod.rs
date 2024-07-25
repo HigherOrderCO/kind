@@ -128,7 +128,7 @@ impl Show {
           },
           Style::Glue => {
             for (i, c) in child.iter().enumerate() {
-              if i > 0 {
+              if i > 0 && !c.is_empty() {
                 out.push_str(&join);
               }
               c.flatten_into(out, fmt, tab, lim);
@@ -159,6 +159,18 @@ impl Show {
       Show::Dec => {
         *tab -= 1
       },
+    }
+  }
+
+  // Checks if the element contains no text.
+  fn is_empty(&self) -> bool {
+    match self {
+      Show::Many { child, .. } => child.is_empty(),
+      Show::Text { value } => value.is_empty(),
+      Show::Line => false,
+      Show::Semi => false,
+      Show::Inc => false,
+      Show::Dec => false,
     }
   }
 

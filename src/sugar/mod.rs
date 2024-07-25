@@ -384,7 +384,6 @@ impl<'i> KindParser<'i> {
 // ---
 
 impl Term {
-
   // Interprets a λ-encoded Algebraic Data Type definition as an ADT struct.
   pub fn as_adt(&self) -> Option<ADT> {
     let name: String;
@@ -654,6 +653,89 @@ impl Term {
     return term;
   }
 
+  pub fn constructor_code((adt_name, adt_term): (&str, &Term), ctr_ref: &str) -> Option<Box<Show>> {
+    // Check if `adt_name` really is an ADT
+    let adt = match &adt_term {
+      // Type variables wrap ADTs in Lams
+      Term::Lam { bod, .. } => return Term::constructor_code((adt_name, bod), ctr_ref),
+      // Skip `Ann` and `Src`
+      Term::Ann { val, .. } => return Term::constructor_code((adt_name, val), ctr_ref),
+      Term::Src { val, .. } => return Term::constructor_code((adt_name, val), ctr_ref),
+      // Found an ADT
+      Term::Slf { .. } => adt_term.as_adt()?,
+      _ => return None,
+    };
+
+    let ctrs = adt.ctrs.clone();
+
+    // Search for constructor in ADT
+    let ctr_ref = ctr_ref.trim_end_matches('/'); // last "/" is not part of name
+    let ctr = ctrs.iter().find(|ctr| format!("{adt_name}/{}", ctr.name) == ctr_ref)?.clone();
+
+    // Generate constructor code:
+
+    // Constructor name.
+    let ctr_name = &ctr.name;
+
+    // Type parameters.
+    // Format: <Par_1> .. <Par_n>
+    let format_param = |param| Show::text(&format!("<{}>", param));
+    let params = Show::glue(" ", adt.pars.iter().map(format_param).rev().collect());
+
+    // Constructor fields.
+    // Format: (f_1: T_1) .. (f_n: T_n)
+    let format_field = |(name, typ): &(String, Term)| {
+      Show::glue("", vec![
+        Show::text("("),
+        Show::glue("", vec![Show::text(name), Show::text(": "), typ.format()]),
+        Show::text(")"),
+      ])
+    };
+    let fields = Show::glue(" ", ctr.flds.iter().map(format_field).collect());
+
+    // Constructor return type with type parameters and type indices.
+    // Format: (adt_name Par_1 .. Par_n Idx_1 .. Idx_n)
+    let mut ctr_typ = vec![Show::text(&adt.name)];
+    adt.pars.iter().rev().for_each(|par| ctr_typ.push(Show::text(par)));
+    ctr.idxs.iter().rev().for_each(|idx| ctr_typ.push(idx.format()));
+    let ctr_typ = Show::glue("", vec![Show::text("("), Show::glue(" ", ctr_typ), Show::text(")")]);
+
+    // Constructor names into Scott-encoding.
+    // Format: λctr_name_1 .. λctr_name_n
+    let format_ctr_lam_name = |ctr_name| Show::text(&format!("λ{ctr_name}"));
+    let names = ctrs.into_iter().map(|ctr| ctr.name);
+    let ctr_lam_names = Show::glue(" ", names.map(format_ctr_lam_name).collect());
+
+    // Fields without their types.
+    // Format: f_1 .. f_n
+    let field_names = Show::glue(" ", ctr.flds.iter().map(|(name, _)| Show::text(name)).collect());
+
+    // Applies constructor and fields.
+    // Format: (ctr_name f_1 .. f_n)
+    let final_app = Show::glue("", vec![
+      Show::text("("),
+      Show::glue(" ", vec![Show::text(ctr_name), field_names]),
+      Show::text(")"),
+    ]);
+
+    // The result should be in the following format:
+    // ctr_name <Par_1> .. <Par_n> (f_1: T_1) .. (f_n: T_n): (adt_name Par_1 .. Par_n Idx_1 .. Idx_n) =
+    //   ~λP λctr_name_1 .. λctr_name_n (ctr_name f_1 .. f_n)
+    let ctr_text = Show::glue(" ", vec![
+      Show::text(ctr_name),
+      params,
+      fields,
+      Show::text(":"),
+      ctr_typ,
+      Show::text("="),
+      Show::line(),
+      Show::text("~λP"),
+      ctr_lam_names,
+      final_app,
+    ]);
+
+    Some(ctr_text)
+  }
 }
 
 impl ADT {

@@ -1,0 +1,3 @@
+data Tests/CtrGen/ParamsTest T Z
+| ctr1 : (Tests/CtrGen/ParamsTest T Z)
+| ctr2 : (Tests/CtrGen/ParamsTest T Z)
